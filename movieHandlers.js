@@ -24,6 +24,17 @@ const getMovieById = (req, res) => {
 };
 const postMovie = (req, res) => {
   const { title, director, year, color, duration } = req.body;
+  database
+    .query(
+      "INSERT INTO movies (title, director, year, color, duration) VALUES (?, ?, ? ,?, ?)",
+      [title, director, year, color, duration]
+    )
+    .then(([result]) => {
+      res.location(`/api/movies/${result}`.sendStatus(201));
+    })
+    .catch((error) => {
+      res.status(404).send(`error: ${error} not found`);
+    });
 };
 
 const getUsers = (req, res) => {
@@ -47,6 +58,21 @@ const getUserById = (req, res) => {
       res.status(404).send(`error: ${error} not found`);
     });
 };
+const postUser = (req, res) => {
+  const { firstname, lastname, email, city, language } = req.body;
+  database
+    .query(
+      "INSERT INTO users (firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      [firstname, lastname, email, city, language]
+    )
+    .then(([result]) => {
+      res.location(`/api/users/${result}`).sendStatus(201);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("erreur");
+    });
+};
 
 module.exports = {
   getMovies,
@@ -54,4 +80,5 @@ module.exports = {
   getUsers,
   getUserById,
   postMovie,
+  postUser,
 };

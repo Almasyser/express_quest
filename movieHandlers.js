@@ -22,6 +22,10 @@ const getMovieById = (req, res) => {
       res.status(500).send(`error: ${error}`);
     });
 };
+const postMovie = (req, res) => {
+  const { title, director, year, color, duration } = req.body;
+};
+
 const getUsers = (req, res) => {
   database
     .query("SELECT * FROM users")
@@ -49,4 +53,5 @@ module.exports = {
   getMovieById,
   getUsers,
   getUserById,
+  postMovie,
 };

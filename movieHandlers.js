@@ -36,6 +36,26 @@ const postMovie = (req, res) => {
       res.status(404).send(`error: ${error} not found`);
     });
 };
+const updateMovie = (req, res) => {
+  const id = parseInt(req.params.id);
+  const { title, director, year, color, duration } = req.body;
+  database
+    .query(
+      "UPDATE movies SET title=?, director=?, year=?, color=?, duration=? WHERE id=?",
+      [title, director, year, color, duration, id]
+    )
+    .then(({ result }) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error editing");
+    });
+};
 
 const getUsers = (req, res) => {
   database
@@ -73,12 +93,34 @@ const postUser = (req, res) => {
       res.status(500).send("erreur");
     });
 };
+const updateUser = (req, res) => {
+  const id = parseInt(req.params.id);
+  const { firstname, lastname, email, city, language } = req.body;
+  database
+    .query(
+      "UPDATE movies SET firstname=?, lastname=?, email=?, city=?, language=? WHERE id=?",
+      [firstname, lastname, email, city, language, id]
+    )
+    .then(({ result }) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error editing");
+    });
+};
 
 module.exports = {
   getMovies,
   getMovieById,
+  postMovie,
+  updateMovie,
   getUsers,
   getUserById,
-  postMovie,
   postUser,
+  updateUser,
 };

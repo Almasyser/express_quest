@@ -26,11 +26,11 @@ const postMovie = (req, res) => {
   const { title, director, year, color, duration } = req.body;
   database
     .query(
-      "INSERT INTO movies (title, director, year, color, duration) VALUES (?, ?, ? ,?, ?)",
+      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ? ,?, ?)",
       [title, director, year, color, duration]
     )
     .then(([result]) => {
-      res.location(`/api/movies/${result}`.sendStatus(201));
+      res.location(`/api/movies/${result}`).sendStatus(201);
     })
     .catch((error) => {
       res.status(404).send(`error: ${error} not found`);

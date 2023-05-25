@@ -1,13 +1,19 @@
 const database = require("./database");
 
 const getMovies = (req, res) => {
+  let sql = "SELECT * FROM movies";
+  const sqlValues = [];
+  if (req.query.color != null) {
+    sql += " WHERE color =?";
+    sqlValues.push(req.query.color);
+  }
   database
-    .query("SELECT * FROM movies")
+    .query(sql, sqlValues)
     .then(([movies]) => {
       res.json(movies);
     })
     .catch((error) => {
-      res.status(500).send(`Error ${error}`);
+      res.status(500).send(`Error founding`);
     });
 };
 
@@ -74,8 +80,19 @@ const deleteMovie = (req, res) => {
 };
 
 const getUsers = (req, res) => {
+  let sql = "SELECT * FROM users";
+  const sqlValues = [];
+  if (req.query.language != null) {
+    sql += " WHERE language =?";
+    sqlValues.push(req.query.language);
+  }
+  if (req.query.city != null) {
+    sql += " WHERE city =?";
+    sqlValues.push(req.query.city);
+  }
+
   database
-    .query("SELECT * FROM users")
+    .query(sql, sqlValues)
     .then(([users]) => {
       res.json(users);
     })

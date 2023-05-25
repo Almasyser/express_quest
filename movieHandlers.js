@@ -26,11 +26,11 @@ const postMovie = (req, res) => {
   const { title, director, year, color, duration } = req.body;
   database
     .query(
-      "INSERT INTO movies (title, director, year, color, duration) VALUES (?, ?, ? ,?, ?)",
+      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ? ,?, ?)",
       [title, director, year, color, duration]
     )
     .then(([result]) => {
-      res.location(`/api/movies/${result}`.sendStatus(201));
+      res.location(`/api/movies/${result}`).sendStatus(201);
     })
     .catch((error) => {
       res.status(404).send(`error: ${error} not found`);
@@ -54,6 +54,22 @@ const updateMovie = (req, res) => {
     .catch((error) => {
       console.error(error);
       res.status(500).send("Error editing");
+    });
+};
+const deleteMovie = (req, res) => {
+  const id = parseInt(req.params.id);
+  database
+    .query("DELETE FROM movies WHERE id=?", [id])
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error deleting");
     });
 };
 
@@ -113,14 +129,32 @@ const updateUser = (req, res) => {
       res.status(500).send("Error editing");
     });
 };
+const deleteUser = (req, res) => {
+  const id = parseInt(req.params.id);
+  database
+    .query("DELETE FROM users WHERE id=?", [id])
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error deleting");
+    });
+};
 
 module.exports = {
   getMovies,
   getMovieById,
   postMovie,
   updateMovie,
+  deleteMovie,
   getUsers,
   getUserById,
   postUser,
   updateUser,
+  deleteUser,
 };

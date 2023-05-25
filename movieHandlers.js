@@ -56,6 +56,22 @@ const updateMovie = (req, res) => {
       res.status(500).send("Error editing");
     });
 };
+const deleteMovie = (req, res) => {
+  const id = parseInt(req.params.id);
+  database
+    .query("DELETE FROM movies WHERE id=?", [id])
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error deleting");
+    });
+};
 
 const getUsers = (req, res) => {
   database
@@ -113,14 +129,32 @@ const updateUser = (req, res) => {
       res.status(500).send("Error editing");
     });
 };
+const deleteUser = (req, res) => {
+  const id = parseInt(req.params.id);
+  database
+    .query("DELETE FROM users WHERE id=?", [id])
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error deleting");
+    });
+};
 
 module.exports = {
   getMovies,
   getMovieById,
   postMovie,
   updateMovie,
+  deleteMovie,
   getUsers,
   getUserById,
   postUser,
   updateUser,
+  deleteUser,
 };
